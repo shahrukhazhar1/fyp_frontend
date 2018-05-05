@@ -1,0 +1,11 @@
+<% flash.each do |type, messages|
+  unless (type == :timedout || type == 'timedout')
+    Array(messages).each do | message | %>
+      <div class="alert alert-<%=flash_class(type.to_sym)%> alert-dismissible alert-<%= "#{type}" %>">
+        <button type="button", data-dismiss="alert", class="close">&times;</button>
+        <%= message %>
+      </div>
+<%  end
+  end
+end
+%>

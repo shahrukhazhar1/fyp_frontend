@@ -1,0 +1,72 @@
+<div class="panel mb25">
+  <div class="panel-body">
+    <div class="col-lg-12">
+      <div class="row">
+        
+        <%= form_tag(approved_quizzes_quiz_creation_index_path, method:'get') do |f| %>
+          <div class="col-lg-6">
+            <%= search_field_tag 'q[name]','',class: 'form-control', placeholder: 'Search quizzes by name...'%>
+          </div>
+          <div class="col-lg-5">
+            <select id="q_grade_id_eq" name="q[grade_id_eq]" class="form-control">
+              <% grades = @grades %>
+              <option value="all">All Standards</option>
+              <% grades.each do |grade| %>
+                <option value="<%= grade['id'] %>"><%= grade['name']%></option>
+              <% end %>
+            </select>
+          </div>
+          <div class="col-lg-1">
+            <%= submit_tag("Search", :class=>"btn btn-default", :name=>"commit") %>
+          </div>
+        <%end%>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="panel mb25">
+  <div class="panel-heading broder">
+    <div class="col-sm-7">
+      <h1>Approved Quiz Page</h1>
+    </div>
+  </div>
+  <div class="panel-body">
+     <div class="row no-margin">
+        <table class="table table-responsive table-hover" id="table_body_unfinished">
+          <tr>
+            <th>#</th>
+            <th>Quiz Name</th>
+            <th>Subject</th>
+            <th>Topic</th>
+            <th>Test Prep</th>
+            <th>Grade</th>
+            <th>Description</th>
+            <th>Sample Question</th>
+          </tr>
+          <% @quiz_results.each_with_index do |quiz_selection, i| %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><%= quiz_selection['name'] %></td>
+                <td><%= quiz_selection['subject'] %></td>
+              <td><%=quiz_selection['topic'] %></td>
+              <td><%=quiz_selection['test_prep'] %></td>
+              <td><%= quiz_selection['grades'].join(",") %></td>
+              <td><span data-container="body" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="<%= quiz_selection['description'] %>">Description</span></td>
+              <td class=""><span data-container="body" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="<%= quiz_selection['first_question'].present? ? quiz_selection['first_question']['text'] : quiz_selection['default_question'] %>">Question</span></td>
+            </tr>
+          <% end %>
+        </table>
+     </div>
+  </div>
+</div>
+
+<!-- popover -->
+    <script>
+    $(function () {
+    $( "[data-toggle='popover']" ).popover( {container: 'body', html: 'true', trigger: 'hover'} );
+     $('[data-toggle="tooltip"]').tooltip()
+    })
+    </script>

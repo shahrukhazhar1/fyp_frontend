@@ -1,0 +1,129 @@
+<div class="col-md-6">
+  <div class="account-management-cont">
+    <h2>Account Management</h2>
+    <h3>Change Password</h3>
+    <%= form_for(:quiz_user, url: settings_path, html:{class: 'change-pwd-form'}) do |f| %>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>New Password:</label>
+            <%= f.password_field :password, autocomplete: "off", class: 'form-control', id: 'quiz-ac-pwd' %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>New Password Confirmation:</label>
+            <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control' %>
+           </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label>Current Password:</label>
+            <%= f.password_field :current_password, autocomplete: "off", class: 'form-control', required: true, id: 'quiz-ac-pwd-1' %>
+          </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Current Password Confirmation:</label>
+              <%= f.password_field :current_password_confirmation, autocomplete: "off", class: 'form-control', required: true %>
+            </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <!-- <a href="" class=>Cancel</a> -->
+            <%= link_to 'Cancel', :back, :class => "btn-block cancel-btn" %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <!-- <a href="" class="btn-block update-btn">Update</a> -->
+            <%= f.submit 'Update', :class => "btn-block update-btn", :id=>"unique-updt-btn" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<div class="col-md-6">
+  <div class="devices-cont">
+    <h2>Email Alerts</h2>
+    <div class="table-responsive">
+    <p>Have Admin messages sent to my email. </p>
+    <%= form_tag("/switch_alerts", remote: true, 'data-type' => :json, id: 'switch-alert-form') do %>
+      <input type="hidden" class="hidden-switch-val" name="switch_val" >
+      <%= check_box_tag :switch, @quiz_user['email_alert'], @quiz_user['email_alert'], :id => "sddss", :'data-toggle' => 'switch', :class => 'ct-blue device-switch' %>
+    <%end%>
+    <div class="table-responsive admin-contact">
+      <p>Have a question? Send an email to <%= mail_to "Quiz.admin@cogli.com", "Quiz.admin@cogli.com", class: 'contact-email' %>, please Include your username. </p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $('.device-switch').on('change', function() {
+    var enabler;
+    value = $(this).parent().hasClass('switch-on');
+    enabler = $(".hidden-switch-val");
+    enabler.val(value);
+    $("#switch-alert-form").submit();  
+  });
+
+  
+
+  $(".change-pwd-form").validate({
+
+    rules: {
+      
+      "quiz_user[current_password]": {
+        required: true,
+        minlength: 8
+      },
+      "quiz_user[password]": {
+        required: true,
+        minlength: 8
+      },
+      "quiz_user[password_confirmation]": {
+        equalTo: "#quiz-ac-pwd"
+      },
+      "quiz_user[current_password_confirmation]": {
+        equalTo: "#quiz-ac-pwd-1"
+      }
+    },
+    messages: {
+      "quiz_user[password]": {
+        required: "Please provide a password",
+        minlength: "Your password must be at least 8 characters long"
+      },
+      "quiz_user[password_confirmation]": {
+       equalTo: "Password and Confirm Password does not match"
+      },
+
+      "quiz_user[current_password]": {
+        required: "Please provide a password",
+        minlength: "Your password must be at least 8 characters long"
+      },
+      "quiz_user[current_password_confirmation]": {
+       equalTo: "Current Password and Confirm Current Password does not match"
+      }
+
+    },
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+
+});
+
+</script>

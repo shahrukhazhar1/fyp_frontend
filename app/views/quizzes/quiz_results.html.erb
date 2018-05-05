@@ -1,0 +1,58 @@
+<div class="container">
+  <ol class="breadcrumb">
+    <li>
+      <a href="/">Home</a>
+    </li>
+    <li class="active">
+      Quiz Results
+    </li>
+  </ol>
+</div>
+
+<div class="container">
+  <div class="device-query-shopping-bottom">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="quiz-results">
+          <h2>Quiz Results</h2>
+          <div id="new-q-table">
+            <div class="row">
+              <div class="col-xs-12">
+                <% if @quiz_results.present? %>
+                <div class="col-xs-12 quiz-queue-table sortable-uniq">
+                  <% @quiz_results.each_with_index do |qs,index| %>
+                    <% index_plus = index +1 %>
+                    <% pass_labels = qs["result_labels"].join(",") %>
+
+                    <div data-item-id = <%= "#{qs['id']}"%> index-row = <%="#{index_plus}"%> class="col-xs-12 qqueue-item-row item row-margin with-hover">
+                      
+                      <div class="col-xs-12 col-sm-6 col-md-4">
+                        <%if qs["passed"] %>
+                          <h4 class="device-msg">
+                            <b>Quiz: <%= qs["quiz_name"] %></b>
+                          </h4>
+                          <p>
+                            You did well in: <b><%= pass_labels %></b>
+                          </p>
+                        <%else%>
+                          <h4 class="device-msg">
+                            <b>Please take this quiz again. You did not pass</b>
+                          </h4>
+                        <%end%>
+                      </div>
+
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+  });
+</script>

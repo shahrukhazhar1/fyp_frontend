@@ -1,0 +1,39 @@
+<%= form_tag({action: 'update'},{multipart: true, :method => "patch", :class => 'form-horizontal bordered-group label-new-form'}) do %>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Label Name</label>
+    </div>
+    <div class="col-sm-4">
+      <%= text_field_tag "label[name]", "#{@label['name']}", class: 'form-control'%>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-xs-6">
+      <%= submit_tag "Update Label", class: 'btn btn-primary'  %>
+      <%= link_to 'Cancel', label_path(@label['id']), class: 'btn btn-default' %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+  $(".label-new-form").validate({
+
+    rules: {
+      "label[name]": {
+        required: true
+      }
+    },
+    messages: {
+      "label[name]": {
+        required: "Label Name cannot be blank"
+      }
+    },
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+});
+</script>

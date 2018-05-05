@@ -1,0 +1,45 @@
+<ol class="breadcrumb">
+  <li>
+    <a href="/">Home</a>
+  </li>
+  <li>
+    <a href="/courses">Courses</a>
+  </li>
+  <li class="active">
+    <%= @course['name'] %>
+  </li>
+</ol>
+
+<div class="panel mb25">
+  <div class="panel-body" id="uniq-panel">
+    <div class="col-md-12">
+      <div>
+        <b>Course Name:</b>
+        <%= @course['name'] %>
+      </div>
+
+      <div>
+        <b>Course Attachment #1:</b>
+        <%= link_to "Course Attachment #1", @course['attachment_url'], target: "_blank"%>
+      </div>
+
+      <div>
+        <b>Course Attachment #2:</b>
+        <%= link_to "Course Attachment #2", @course['attachment2_url'], target: "_blank"%>
+      </div>
+
+       <div>
+        <b>Support Activated?</b>
+        <%= check_box_tag 'course[support]','',@course['support']  %>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+  
+</script>

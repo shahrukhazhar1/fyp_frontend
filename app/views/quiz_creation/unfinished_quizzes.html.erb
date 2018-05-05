@@ -1,0 +1,44 @@
+<div class="panel mb25">
+  <div class="panel-heading broder">
+    <div class="col-sm-7">
+      <h1>Unfinished Quiz Page</h1>
+    </div>
+  </div>
+  <div class="panel-body">
+     <div class="row no-margin">
+        <table class="table table-responsive table-hover" id="table_body_unfinished">
+          <tr>
+            <th>#</th>
+            <th>Quiz Name</th>
+            <th>Difficulty Level</th>
+            <th>Description</th>
+            <th>View Quiz</th>
+          </tr>
+          <% @quiz_results.each_with_index do |quiz_selection, i| %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><%= quiz_selection['name'] %></td>
+              <td><%= quiz_selection['grades'].join(",") %></td>
+              <td class="">
+                <span data-container="body" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="<%= quiz_selection['description'] %>">Description</span>
+              </td>
+
+
+              <!-- <td class=""><span data-container="body" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="<%= quiz_selection['first_question'].present? ? quiz_selection['first_question']['text'] : quiz_selection['default_question'] %>">Question</span></td> -->
+              <td>
+                <%= link_to 'View Quiz',quiz_path(quiz_selection['id']), :class => 'btn btn-default' %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+     </div>
+  </div>
+</div>
+
+<!-- popover -->
+    <script>
+    $(function () {
+    $( "[data-toggle='popover']" ).popover( {container: 'body', html: 'true', trigger: 'hover'} );
+     $('[data-toggle="tooltip"]').tooltip()
+    })
+    </script>

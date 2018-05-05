@@ -1,0 +1,205 @@
+<%= form_tag(quizzes_path, {multipart: true, :class => 'form-horizontal bordered-group quiz-new-form'}) do %>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Select Course</label>
+    </div>
+    <div class="col-sm-4">
+      <select id="quiz_course_id" name="course_id" class="form-control select-course">
+        <% courses = @courses %>
+        <% courses.each do |course| %>
+          <option value="<%= course['id'] %>"><%= course['name']%></option>
+        <% end %>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Quiz Name</label>
+    </div>
+    <div class="col-sm-4">
+      <%= text_field_tag "quiz[name]", '',class: 'form-control'%>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Topic</label>
+    </div>
+    <div class="col-sm-4">
+      <%= text_field_tag "quiz[topic]", '', class: 'form-control'%>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Difficulty Level</label>
+    </div>
+    <div class="col-sm-4">
+      <select id="quiz_grade_id" name="grade_all[]" class="form-control select-grade" multiple="multiple">
+        <% grades = @quiz_new %>
+        <% grades.each do |grade| %>
+          <option value="<%= grade['id'] %>"><%= grade['name']%></option>
+        <% end %>
+      </select>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Passing Percentage </label>
+    </div>
+
+    <div class="col-sm-4">
+      <%= number_field_tag "quiz[passing_percentage]", '', {:class => 'form-control', :name => "quiz[passing_percentage]"} %>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Description</label>
+    </div>
+    <div class="col-sm-4">
+      <%= text_area_tag "quiz[description]", '',:placeholder => "Max length 10000 characters", :maxlength =>10000 , :class=> 'form-control'%>
+    </div>
+  </div>
+
+ <!--  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Quiz Supplement Field Type :</label>
+    </div>
+    <div class="col-sm-4">
+      <input type = "radio" class = "form-control guide-text-suppl" name="quiz_suppl">Quiz Supplement Text
+      <br>
+      <input type = "radio" class = "form-control guide-pdf-suppl" name="quiz_suppl">Quiz Supplement Attachment
+    </div>
+  </div>
+
+  <div class="form-group supplement-text hidden">
+    <div class="col-sm-2 control-label">
+      <label>Quiz Supplement Text</label>
+    </div>
+    <div class="col-sm-4">
+      <%= text_area_tag "quiz[supplement_text]", '',:placeholder => "Enter Quiz Supplement Text", :maxlength =>10000 , :class=> 'form-control'%>
+    </div>
+  </div> -->
+
+
+  <!-- <div class="form-group supplement-pdf hidden">
+    <div class="col-sm-2 control-label">
+      <label>Quiz Supplement Attachment</label>
+    </div>
+    <div class="col-sm-4">
+
+      <%=  file_field_tag "quiz[attachment]", class: 'form-control', placeholder: '.pdf,image/*',:accept => ".pdf,image/*" %>
+    </div>
+  </div> -->
+
+  <!-- <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Quiz Study Field Type :</label>
+    </div>
+    <div class="col-sm-4">
+      <input type = "radio" class = "form-control guide-text" name="quiz_guide">Quiz Study Guide Text
+      <br>
+      <input type = "radio" class = "form-control guide-pdf" name="quiz_guide">Quiz Study Guide Attachment
+    </div>
+  </div> -->
+
+
+  <div class="form-group guide-field hidden">
+    <div class="col-sm-2 control-label">
+      <label>Quiz Study Guide Text</label>
+    </div>
+    <div class="col-sm-4">
+      <%= text_area_tag "quiz[quiz_guide]", '',:placeholder => "Enter Quiz Guide Text", :maxlength =>10000 , :class=> 'form-control'%>
+    </div>
+  </div>
+
+
+  <div class="form-group pdf-field hidden">
+    <div class="col-sm-2 control-label">
+      <label>Quiz Guide Attachment</label>
+    </div>
+    <div class="col-sm-4">
+
+      <%=  file_field_tag "quiz[quiz_guide_attachment]", class: 'form-control', placeholder: '.pdf,image/*',:accept => ".pdf,image/*" %>
+    </div>
+  </div>
+
+
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-xs-6">
+      <%= submit_tag "Create Quiz", class: 'btn btn-primary'  %>
+      <%= link_to 'Cancel', '/', class: 'btn btn-default' %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+  $(".guide-text").click(function(){
+    $(".guide-field").removeClass("hidden")
+    $(".pdf-field").addClass("hidden");
+  });
+
+
+  $(".guide-pdf").click(function(){
+    $(".pdf-field").removeClass("hidden");
+    $(".guide-field").addClass("hidden")
+  });
+
+
+  $(".guide-text-suppl").click(function(){
+    $(".supplement-text").removeClass("hidden")
+    $(".supplement-pdf").addClass("hidden");
+  });
+
+  $(".guide-pdf-suppl").click(function(){
+    $(".supplement-pdf").removeClass("hidden");
+    $(".supplement-text").addClass("hidden")
+  });
+
+
+
+
+
+  $(".select-grade").select2({
+    placeholder: "Select Grade Level"
+  });
+
+  $(".quiz-new-form").validate({
+
+    rules: {
+      "quiz[name]": {
+        required: true
+      },
+      "quiz[subject]": {
+        required: true
+      },
+      "quiz[description]": {
+        maxlength: 10000
+      }
+    },
+    messages: {
+      "quiz[name]": {
+        required: "Quiz Name cannot be blank"
+      },
+      "quiz[subject]": {
+        required: "Quiz Subject cannot be blank"
+      },
+      "quiz[description]": {
+        maxlength: "Quiz Description length cannot be greater than 10,000"
+      }
+    },
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+});
+</script>

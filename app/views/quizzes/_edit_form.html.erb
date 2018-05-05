@@ -1,0 +1,106 @@
+<%= form_tag({action: 'update'},{multipart: true, :method => "patch", :class => 'form-horizontal bordered-group quiz-new-form'}) do %>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Quiz Name</label>
+    </div>
+    <div class="col-sm-4">
+      <%= text_field_tag "quiz[name]", "#{@quiz['name']}", class: 'form-control'%>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Topic</label>
+    </div>
+    <div class="col-sm-4">
+      <%= text_field_tag "quiz[topic]", "#{@quiz['topic']}", class: 'form-control'%>
+    </div>
+  </div>
+
+ 
+
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Difficulty Level</label>
+    </div>
+
+    <div class="col-sm-4">
+      <select id="quiz_grade_id" name="grade_all[]" class="form-control select-grade" multiple="multiple">
+        <% grades = @grades %>
+        <% grades.each do |grade| %>
+        <%if @quiz['grades'].include?(grade['name']) %>
+          <option value="<%= grade['id'] %>" selected><%= grade['name']%></option>
+        <%else%>
+          <option value="<%= grade['id'] %>"><%= grade['name']%></option>
+        <%end%>
+        <% end %>
+      </select>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Passing Percentage </label>
+    </div>
+
+    <div class="col-sm-4">
+      <%= number_field_tag "quiz[passing_percentage]", "#{@quiz['passing_percentage']}", {:class => 'form-control', :name => "quiz[passing_percentage]"} %>
+    </div>
+  </div>
+
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Description</label>
+    </div>
+    <div class="col-sm-4">
+      <%= text_area_tag "quiz[description]", "#{@quiz['description']}",:placeholder => "Max length 10000 characters", :maxlength =>10000 , :class=> 'form-control'%>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-xs-6">
+      <%= submit_tag "Update Quiz", class: 'btn btn-primary'  %>
+      <%= link_to 'Cancel', quiz_path(@quiz['id']), class: 'btn btn-default' %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $(".select-grade").select2({
+    placeholder: "Select Grade Level"
+  });
+
+  $(".quiz-new-form").validate({
+
+    rules: {
+      "quiz[name]": {
+        required: true
+      },
+      "quiz[subject]": {
+        required: true
+      },
+      "quiz[description]": {
+        maxlength: 10000
+      }
+    },
+    messages: {
+      "quiz[name]": {
+        required: "Quiz Name cannot be blank"
+      },
+      "quiz[subject]": {
+        required: "Quiz Subject cannot be blank"
+      },
+      "quiz[description]": {
+        maxlength: "Quiz Description length cannot be greater than 10,000"
+      }
+    },
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+});
+</script>

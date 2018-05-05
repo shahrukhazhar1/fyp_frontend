@@ -1,0 +1,179 @@
+<%= nested_form_for @question, url: quiz_questions_path , html: {multipart:true, class: 'form-horizontal'} do |f| %>
+  <% if @question.errors.any? %>
+    <div id="error_explanation">
+      <h2>Please fix following issues :</h2>
+      <ul>
+        <% @question.errors.full_messages.each do |msg| %>
+          <li>
+            <%= msg %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <%= f.label :text, "Question" %>
+    </div>
+    <div class="col-sm-4">
+      <%= f.text_area :text, class: 'form-control', placeholder: "Max length 10,000 characters", maxlength: 10000 %>
+    </div>
+   <!--  <div class="col-sm-12">
+      <div class="col-sm-4 col-sm-offset-2">
+        <%= f.label :latex_text %>
+        <%= f.check_box :latex %>
+      </div>
+    </div>
+    <div class="col-sm-12">
+      <div class="col-sm-2 control-label">
+        <label>Question Attachment</label>
+      </div>
+      <div class="col-sm-4">
+        <%=  file_field_tag "question[attachment]", class: 'form-control', placeholder: '.pdf,image/*',:accept => ".pdf,image/*" %>
+      </div>
+    </div> -->
+  </div>
+
+  <div class="col-sm-12 col-sm-offset-1">
+    <p class='lead'>Answers</p>
+  </div>
+
+  <div id="answers">
+    <%= f.fields_for :answers do |a| %>
+      <div class="form-group">
+        <div class="col-sm-2 control-label">
+          <%= a.label :textm, "Answer" %>
+        </div>
+        <div class="col-sm-4">
+          <%= a.text_area :text, class: 'form-control', placeholder: "Max length 10,000 characters", maxlength: 10000 %>
+        </div>
+        <span class="input-group-btn">
+          <%= a.link_to_remove 'Remove answer', class: 'btn btn-danger' %>
+        </span>
+        <div class="col-sm-12">
+          <div class="col-sm-offset-2 col-sm-2">
+            <%= a.label :correct %>
+            <%= a.check_box :correct %>
+          </div>
+          <!-- <div class="col-sm-4">
+            <%= a.label :latex_text %>
+            <%= a.check_box :latex %>
+          </div> -->
+        </div>
+
+        <!-- <div class="col-sm-12 answer-file-attachment-input">
+          <div class="col-sm-2 control-label">
+            <label>Attachment</label>
+          </div>
+          <div class="col-sm-4">
+            <%= a.file_field :attachment, class: 'form-control', placeholder: '.pdf,image/*',:accept => ".pdf,image/*" %>
+          </div>
+        </div> -->
+      </div>
+    <% end %>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-xs-6">
+      <%= f.link_to_add 'Add Answer', :answers, :data => { :target => "#answers", :maximum => 4}, :class => 'btn btn-success'  %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Select Labels for the question</label>
+    </div>
+    <div class="col-sm-4">
+      <select id="question_label_id" name="label_all[]" class="form-control select-label" multiple="multiple">
+        <% labels = @labels %>
+        <% labels.each do |label| %>
+          <option value="<%= label['id'] %>"><%= label['name']%></option>
+        <% end %>
+      </select>
+    </div>
+  </div>
+
+
+
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <%= f.label :hint, "Hint" %>
+    </div>
+    <div class="col-sm-4">
+      <%= f.text_field :hint, class: 'form-control' %>
+    </div>
+  </div>
+
+
+  <!-- <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Comment Box for this Question</label>
+    </div>
+    <div class="col-sm-4">
+      <%= f.text_area :comment, class: 'form-control' %>
+    </div>
+  </div> -->
+
+  <!-- <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Question Study Type :</label>
+    </div>
+    <div class="col-sm-4">
+      <input type = "radio" class = "form-control guide-text" name="quiz_guide">Study Guide Text
+      <br>
+      <input type = "radio" class = "form-control guide-pdf" name="quiz_guide">Study Guide PDF
+    </div>
+  </div> -->
+
+
+  <div class="form-group guide-field hidden">
+    <div class="col-sm-2 control-label">
+      <label>Question Study Guide</label>
+    </div>
+    <div class="col-sm-4">
+      <%= f.text_area :study_guide, class: 'form-control' %>
+    </div>
+  </div>
+
+
+  <div class="form-group pdf-field hidden">
+    <div class="col-sm-2 control-label">
+      <label>Question Study Guide PDF</label>
+    </div>
+    <div class="col-sm-4">
+      <%=  file_field_tag "question[study_guide_attachment]", class: 'form-control', placeholder: '.pdf,image/*',:accept => ".pdf,image/*" %>
+    </div>
+  </div>
+
+  <hr>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-xs-6">
+      <%= f.submit class: 'btn btn-primary' %>
+      <%= link_to 'Cancel', cancel_link, :class => 'btn btn-default' %>
+    </div>
+  </div>
+<% end %>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $(".select-label").select2({
+      placeholder: "Select Label"
+    });
+
+    $(".guide-text").click(function(){
+
+      $(".guide-field").removeClass("hidden")
+      $(".pdf-field").addClass("hidden");
+    });
+
+    $(".guide-pdf").click(function(){
+      $(".pdf-field").removeClass("hidden");
+      $(".guide-field").addClass("hidden")
+      
+    });
+
+  });
+
+</script>

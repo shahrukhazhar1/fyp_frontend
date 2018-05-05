@@ -1,0 +1,43 @@
+<div class="panel mb25">
+  <div class="panel-heading broder">
+    <div class="col-sm-7">
+      <h1>Submitted Quiz Page</h1>
+    </div>
+  </div>
+  <div class="panel-body">
+     <div class="row no-margin">
+        <table class="table table-responsive table-hover" id="table_body_unfinished">
+          <tr>
+            <th>#</th>
+            <th>Quiz Name</th>
+            <th>Subject</th>
+            <th>Grade</th>
+            <th>Status</th>
+            <th>Test Prep</th>
+            <th>View Admin Comments</th>
+            <th>Review Quiz</th>
+            <th>Create New Version</th>
+          </tr>
+          <% @quiz_results.each_with_index do |quiz_selection, i| %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><%= quiz_selection['name'] %></td>
+              <td><%= quiz_selection['subject'] %></td>
+              <td><%= quiz_selection['grade.name'] %></td>
+              <td><%= quiz_selection['quiz_status'].try(:titleize) %></td>
+              <td><%= quiz_selection['test_prep'] %></td>
+              <td>
+                <%= link_to 'View Admin Comments',quiz_path(quiz_selection['id']), :class => 'btn btn-default' %>
+              </td>
+              <td>
+                <%= link_to 'Review Quiz',quiz_path(quiz_selection['id']), :class => 'btn btn-default' %>
+              </td>
+              <td>
+                <%= link_to 'Create New Version',new_verison_quiz_path(quiz_selection['id']), :class => 'btn btn-default' %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+     </div>
+  </div>
+</div>

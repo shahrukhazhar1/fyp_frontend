@@ -1,0 +1,42 @@
+<div class="row ">
+  <div class="col-md-9">
+    <div class="quiz-cont fadeInUp">
+    	<%if @quiz_results.blank? %>
+    		<h1>No quizz added yet</h1>
+    	<%else%>
+    		<h1>Recently Added Quizzes</h1>
+    	<%end%>
+      <% @quiz_results.each do |quiz_result| %>
+        <div class="quiz-row">
+          <div class="top-bar clearfix">
+            <span class="time"><%= quiz_result["created_at"].to_date.to_formatted_s(:minutes_and_seconds) %></span>
+            <span class="date"><%= quiz_result["created_at"].to_date %></span>
+          </div>
+          <%= link_to quiz_path(quiz_result['id']), class: "quiz" do %>
+            <span>Q.</span> <%= quiz_result['name'] %>
+          <% end %>
+          <div class="bottom-bar clearfix">
+            <span class="device">Status: <%= quiz_result["quiz_status"] %></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col-md-3 device-catTop">
+    <div class="manage-devices">
+      <h2>Select Options</h2>
+      <ul>
+       <li><%= link_to 'Create Quiz', new_quiz_path %></li>
+        <li><%= link_to 'View Quizzes', unfinished_quizzes_quiz_creation_index_path %></li>
+        <li><%= link_to 'Create Course', new_course_path  %></li>
+        <li><%= link_to 'View Courses', courses_path  %></li>
+        <li><%= link_to 'Create Labels', new_label_path  %></li>
+        <li><%= link_to 'View Labels', labels_path  %></li>
+        <li><%= link_to 'View Quiz Results', quiz_results_quizzes_path  %></li>
+      </ul>
+    </div>
+  </div>
+
+  
+</div>

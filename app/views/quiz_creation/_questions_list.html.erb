@@ -1,0 +1,56 @@
+<%= form_tag(quizzes_path, {multipart: true, :class => 'form-horizontal bordered-group quiz-new-form'}) do %>
+
+  
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Questions</label>
+    </div>
+    <div class="col-sm-4">
+      <select class="form-control ques-msg">
+        <%if @question.present? %>
+          <option value="<%= @question['id'] %>"><%= @question['text']%></option>
+        <%end%>
+          <%if @questions.present? && @questions.count > 1%>
+            <% @questions.each do |question| %>
+              <%if question['id'] != @question['id'] %>
+                <option value="<%= question['id'] %>"><%= question['text']%></option>
+              <%end%>
+            <% end %>
+          <%end%>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-xs-6">
+
+    </div>
+  </div>
+<% end %>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+
+  $('.ques-msg').on('change', function() {
+    console.log("TESTTTTTTTTTTTTTTTTTTTTTT");
+    var quizID = "<%=@quiz['id']%>";
+    val = $(this).find("option:selected").val();
+    console.log(val);
+    $.ajax({
+      type: 'GET',
+      url: '/messages',
+      dataType: 'script',
+      data: {
+        quiz_id: quizID,
+        question_id: val
+      }
+    });
+
+  });
+
+  
+});
+</script>

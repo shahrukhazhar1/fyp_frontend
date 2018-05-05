@@ -1,0 +1,35 @@
+<div class="panel mb25">
+  <div class="panel-heading broder">
+    <div class="col-sm-7">
+      <h1>All Labels</h1>
+    </div>
+  </div>
+  <div class="panel-body">
+     <div class="row no-margin">
+        <table class="table table-responsive table-hover" id="table_body_unfinished">
+          <tr>
+            <th>#</th>
+            <th>Label Name</th>
+            <th>Edit</th>
+            <th>Delete</th>
+            <th>View Label</th>
+          </tr>
+          <% @labels.each_with_index do |label, i| %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><%= label['name'] %></td>
+              <td>
+                <%= link_to 'Edit Label',edit_label_path(label['id']), :class => 'btn btn-default' %>
+              </td>
+              <td>
+                <%= link_to "Delete Label", "/labels/#{label['id']}", :method => :delete, :data => {:confirm => 'Are you sure you want to delete this label?'}, :class => 'btn btn-danger' %>
+              </td>
+              <td>
+                <%= link_to 'View Label',label_path(label['id']), :class => 'btn btn-default' %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+     </div>
+  </div>
+</div>

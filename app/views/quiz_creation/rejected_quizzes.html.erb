@@ -1,0 +1,50 @@
+<div class="panel mb25">
+  <div class="panel-heading broder">
+    <div class="col-sm-7">
+      <h1>Rejected Quiz Page</h1>
+    </div>
+  </div>
+  <div class="panel-body">
+     <div class="row no-margin">
+        <table class="table table-responsive table-hover" id="table_body_unfinished">
+          <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>Quiz Name</th>
+            <th>Subject</th>
+            <th>Status</th>
+            <th>Topic</th>
+            <th>Test Prep</th>
+            <th>Grade</th>
+            <th>Description</th>
+            <th>Sample Question</th>
+            <th>Copy for Resubmission</th>
+          </tr>
+          <% @quiz_results.each_with_index do |quiz_selection, i| %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><%= quiz_selection['quiz_user_name']%></td>
+              <td><%= quiz_selection['name'] %></td>
+              <td><%= quiz_selection['subject'] %></td>
+              <td><%= quiz_selection['quiz_status'] %></td>
+              <td><%= quiz_selection['topic'] %></td>
+              <td><%= quiz_selection['test_prep'] %></td>
+              <td><%= quiz_selection['grades'].join(",") %></td>
+              <td class="">
+                <span data-container="body" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="<%= quiz_selection['description'] %>">Description</span>
+              </td>
+               <td class=""><span data-container="body" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="<%= quiz_selection['first_question'].present? ? quiz_selection['first_question']['text'] : quiz_selection['default_question'] %>">Question</span></td>
+               <td><%= link_to 'Copy for Resubmission', edit_quiz_path(quiz_selection['id']), :class => 'btn btn-default' %></td>
+            </tr>
+          <% end %>
+        </table>
+     </div>
+  </div>
+</div>
+
+    <script>
+    $(function () {
+    $( "[data-toggle='popover']" ).popover( {container: 'body', html: 'true', trigger: 'hover'} );
+     $('[data-toggle="tooltip"]').tooltip()
+    })
+    </script>

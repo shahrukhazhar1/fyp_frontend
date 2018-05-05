@@ -1,0 +1,33 @@
+<% breadcrumb :all_quizzes %>
+<div class="panel mb25">
+  <div class="panel-heading broder">
+    <div>
+      <h1>All Quizzes of '<%= current_user.email %>'</h1>
+    </div>
+  </div>
+  <div class="panel-body">
+     <div class="row no-margin">
+        <table class="table table-responsive table-hover">
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Device</th>
+            <th>Subject</th>
+            <th>Standard</th>
+            <th>created_at</th>
+          </tr>
+          <% @quizzes.each_with_index do |quiz_selection, i| %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><%= quiz_selection.quiz.name %></td>
+              <td><%= quiz_selection.device %></td>
+              <td><%= quiz_selection.quiz.subject %></td>
+              <td><%= quiz_selection.quiz.grades.map(&:name).join(",") %></td>
+              <td><%= quiz_selection.created_at.to_formatted_s :long_ordinal %></td>
+            </tr>
+          <% end %>
+        </table>
+     </div>
+  </div>
+</div>
+

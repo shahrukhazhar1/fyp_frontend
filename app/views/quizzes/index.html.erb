@@ -1,0 +1,74 @@
+<% breadcrumb :quizzes, @device %>
+<div class="panel mb25">
+  <div class="panel-body">
+    <div class="col-lg-12">
+      <div class="row">
+        <%= search_form_for @q, :url => quizzes_path do |f| %>
+          <div class="col-lg-6">
+            <%= f.search_field :name_cont, :class => 'form-control', :placeholder => 'Search quizzes by name...' %>
+          </div>
+          <div class="col-lg-5">
+            <%= f.select :grade_id_eq, options_from_collection_for_select(Grade.all.order(:priority), :id, :name, @q.grade_id_eq),
+              {:include_blank => 'All Standards'}, :class => 'form-control' %>
+          </div>
+          <div class="col-lg-1">
+            <%= f.submit 'Search', :class => 'btn btn-default' %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel mb25">
+  <div class="panel-heading broder">
+    <div class="col-sm-7">
+      <h1>Quizzes</h1>
+    </div>
+    <div class="col-sm-5">
+      <h2 class="pull-right">
+        <%= link_to('Clear Filters', quizzes_path(:q => {:s => 'priority ASC'}),
+          :class => 'btn btn-danger') unless params[:q].try(:[], :s).try :include?, 'priority' %>
+        
+        <%= link_to 'New Quiz', new_quiz_path, :class => 'btn btn-primary' %>
+      </h2>
+    </div>
+  </div>
+  <div class="panel-body">
+     <div class="row no-margin">
+        <table class="table table-responsive table-hover" id="table_body_id">
+          <tr>
+            <th>#</th>
+            <th><%= sort_link(@q, :name, "Name") %></th>
+            <!-- <th>Status</th> -->
+            <th><%= sort_link(@q, :subject) %></th>
+            <th><%= sort_link(@q, :grade_priority, 'Standard') %></th>
+            <th>Priority</th>
+            <th><%= sort_link(@q, :created_at) %></th>
+            <th>Actions</th>
+          </tr>
+          <% @quizzes.each_with_index do |quiz_selection, i| %>
+            <tr>
+              <td><%= i + 1 %></td>
+              <td><%= quiz_selection.name %></td>
+              <!-- <td><%#= humanized_status quiz_selection.quiz %></td> -->
+              <td><%= quiz_selection.subject %></td>
+              <td><%= quiz_selection.grades.map(&:name).join(",") %></td>
+              <td>
+                <% condition = params[:q].try(:[], :s).try :include?, 'priority' %>
+                
+              </td>
+              <td><%= quiz_selection.created_at.to_formatted_s :long_ordinal %></td>
+              <td>
+                <%= link_to 'View Questions',quiz_path(quiz_selection), :class => 'btn btn-default' %>
+                <%= link_to 'Edit', [:edit, quiz_selection], :class => 'btn btn-warning' %>
+                <%= link_to [quiz_selection], :method => :delete, :data => {:confirm => 'Are you sure?'}, :class => 'btn btn-danger' do %>
+                  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+     </div>
+  </div>
+</div>

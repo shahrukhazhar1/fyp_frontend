@@ -1,0 +1,47 @@
+<%= form_tag(quizzes_path, {multipart: true, :class => 'form-horizontal bordered-group quiz-new-form'}) do %>
+
+  
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Quizzes</label>
+    </div>
+    <div class="col-sm-4">
+      <% array = Array.new %>
+      <% array = ["SAT Reading","SAT Math","SAT Writing and Language","ACT Math","ACT Reading", "ACT English", "ACT Science","Not Applicable"] %>
+      <select class="form-control quiz-msg" id="quiz_test_prep" name="quiz[test_prep]">
+        <% preps = array %>
+        <% @quiz_results.each do |quiz| %>
+          <option value="<%= quiz['id'] %>"><%= quiz['name']%></option>
+        <% end %>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-xs-6">
+
+    </div>
+  </div>
+<% end %>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+  $('.quiz-msg').on('change', function() {
+    console.log("TESTTTTTTTTTTTTTTTTTTTTTT");
+    val = $(this).find("option:selected").val();
+    console.log(val);
+    $.ajax({
+      type: 'GET',
+      url: '/messages',
+      dataType: 'script',
+      data: {
+        quiz_id: val
+      }
+    });
+  });
+  
+});
+</script>

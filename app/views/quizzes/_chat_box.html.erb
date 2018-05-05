@@ -1,0 +1,74 @@
+<% prev_val = nil %>
+<% op  = @chats.first['posted_by'] %>
+<% @chats.each_with_index do |comment,index| %>
+  <% if op == comment['posted_by'] %>
+    <li class="left clearfix"><span class="chat-img pull-left">
+      <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" /></span>
+      <div class="chat-body clearfix">
+        <div class="header">
+          <strong class="primary-font"><%=comment['posted_by_email']%></strong> <small class="pull-right text-muted">
+          <span class="glyphicon glyphicon-time"></span><%= time_ago_in_words(comment['created_at']) %></small>
+        </div>
+        <p><%=comment['text']%></p>
+      </div>
+    </li>
+  <%else%>
+    <li class="right clearfix"><span class="chat-img pull-right">
+      <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" /></span>
+      <div class="chat-body clearfix">
+        <div class="header">
+          <small class=" text-muted"><span class="glyphicon glyphicon-time"></span><%= time_ago_in_words(comment['created_at']) %></small>
+          <strong class="pull-right primary-font"><%=comment['posted_by_email']%></strong>
+        </div>
+        <p><%=comment['text']%></p>
+      </div>
+    </li>
+  <%end%>
+  <% prev_val = comment['posted_by'] %>
+<%end%>
+
+
+
+<script type="text/javascript">
+  function submitChat(userType,userId)
+    {
+      // debugger
+      var quizID = "<%=@quiz['id']%>";
+      var userEmail = "<%=session[:quiz_user]['email']%>";
+      var chatTextDiv = document.getElementById('chat-input');
+      var chatText = document.getElementById('chat-input').value;
+      if (chatText)
+      {
+        
+
+        $.ajax({
+          url : '/set_comment',
+          dataType: 'script',
+          type: "POST",
+          data :{ quiz_user_id: userId, user_type: userType, id: quizID, chat_text: chatText },
+          success: function(data, textStatus, jqXHR)
+          {},
+          error: function (jqXHR, textStatus, errorThrown)
+          {}
+        });
+
+
+        var text = chatText;
+        var chat =  '<li class="right clearfix"><span class="chat-img pull-right"><img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><small class=" text-muted"><span class="glyphicon glyphicon-time"></span>Just Now</small><strong class="pull-right primary-font">' + userEmail  +'</strong></div><p>'+ text +'</p></div></li>'
+        
+
+
+
+
+
+        var chatBox =document.getElementById('chatBox');
+        chatBox.innerHTML += chat;
+
+
+
+
+
+        $("#chat-input").val("");
+      }
+    };
+</script>

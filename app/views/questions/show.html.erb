@@ -1,0 +1,248 @@
+<%# breadcrumb :answers, @quiz, @question %>
+<%if @quiz['quiz_status'].try(:downcase) == 'pending' || @quiz['quiz_status'].try(:downcase) == 'rejected' %>
+  <% quiz_link_text = "Submitted Quizzes" %>
+  <% quiz_link = "/quiz_creation/submitted_quizzes" %>
+<% elsif @quiz['quiz_status'].try(:downcase) == 'approved' %>
+  <% quiz_link_text = "Approved Quizzes" %>
+  <% quiz_link = "/quiz_creation/approved_quizzes" %>
+<% elsif @quiz['quiz_status'].try(:downcase) == 'incomplete' %>
+  <% quiz_link_text = "Quizzes" %>
+  <% quiz_link = "/quiz_creation/unfinished_quizzes" %>
+<%else%>
+<% quiz_link_text = "Quizzes" %>
+<% quiz_link = "/quiz_creation/unfinished_quizzes" %>
+<%end%>
+
+
+<%active_quiz = @quiz['name'].to_s.truncate(25) %>
+
+<ol class="breadcrumb">
+  <li>
+    <a href="/">Home</a>
+  </li>
+  <li>
+    <a href="<%=quiz_link%>"><%=quiz_link_text%></a>
+  </li>
+  <li>
+    <a href="/quizzes/<%=@quiz['id']%>"><%=active_quiz%></a>
+  </li>
+  <li class="active">
+    Question <%= @question['question_number'] %>
+  </li>
+</ol>
+
+<div class="panel mb25">
+  <div class="panel-heading">
+    <div class="col-xs-12">
+      <div class="row">
+        <h1 class="col-md-10">
+          <%= @quiz['name'] %>
+        </h1>
+        <div class="col-md-2 align-actions-with-heading">
+            <%if @quiz['quiz_status']=="incomplete" %>
+            <%= link_to 'Edit', edit_quiz_question_path(@quiz['id'], @question['id']), :class => 'btn btn-default' %>
+            <%= link_to 'Add Question &plus;'.html_safe, new_quiz_question_path(@quiz['id']), class: 'btn btn-primary' %>
+            <%end%>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="col-xs-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <%= @question['text'] %>
+          </h3>
+        </div>
+        <h5>
+          Hint: <%= @question['hint'] %>
+        </h5>
+        <div class="panel-body">
+          <% @question['answers'].each do |answer| %>
+            <% if answer['attachment']['url'].present? %>
+              <%= link_to "Link", answer['attachment']['url'], :class => "btn btn-#{answer['correct'].present? ? 'success' : 'default'}"%>
+            <% else %>
+              <%= button_tag answer['text'], :type => :button, :class => "btn btn-#{answer['correct'].present? ? 'success' : 'default'}" %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row text-center">
+  <ul class="pagination">
+    <% unless @current_page == 1 %>
+      <li>
+        <a href="<%=@prev_url%>" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+    <%end%>
+    <% @qs.each_with_index do |question,index| %>
+      <% count = index + 1 %>
+      <% if @current_page == count %>
+        <li class="active"><%= link_to count, quiz_question_path(@quiz['id'], question['id']) %>
+        </li>
+      <%else%>
+        <li><%= link_to count, quiz_question_path(@quiz['id'], question['id']) %></li>
+      <%end%>
+    <%end%>
+    <% unless @current_page == @total_questions %>
+      <li>
+        <a href="<%=@next_url%>" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    <%end%>
+  </ul>
+</div>
+
+
+<%if @question['study_guide'].present? %>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          View Study Guide
+        </a>
+      </h4>
+    </div>
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+      <div class="panel-body">
+        <%=@question['study_guide']%>
+      </div>
+    </div>
+  </div>
+</div>
+<%end%>
+
+<%if @question['study_guide_attachment_url'].present? %>
+<div class="panel-group" id="accordion1" role="tablist" aria-multiselectable="true">
+  <div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingTwo">
+      <h4 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion1" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          View Study Guide
+        </a>
+      </h4>
+    </div>
+    <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+      <div class="panel-body">
+        <iframe src= <%=@question['study_guide_attachment_url']%> width="600" height="780" style="border: none;"> </iframe>
+      </div>
+    </div>
+  </div>
+</div>
+<%end%>
+
+
+
+
+<!--Chat -->
+
+<!-- <div class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-comment"></span> Chat
+        </div>
+        
+        <div class="panel-body panel-body-chat" id="chat-panel-question">
+          <%if @question['comments'].blank? %>
+            <p>No chat History</p>
+          <%else%>
+            <ul class="chat" id="chatBoxQuestion">
+              <% @chats = @question['comments'] %>
+              <%= render(partial: 'chat_box')%>
+              
+            </ul>
+          <%end%>  
+        </div>
+          
+      
+        <div class="panel-footer">
+          <div class="input-group">
+            <input id="chat-input-question" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+            <span class="input-group-btn">
+              <input type="hidden" id="quiz-user-id">
+              <button class="btn btn-primary btn-sm" id="btn-chat-question">Send</button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div> -->
+
+
+
+
+<script type="text/javascript">
+  $('.collapse').collapse();
+
+  $(document).ready(function(){
+    $('.sample-ques').click(function(){
+      question_id = this.getAttribute('id');
+      var apiURL = "/set_sample_question";
+
+      $.ajax({
+        url : apiURL,
+        type: "POST",
+        data :{ question_id: question_id },
+        success: function(data, textStatus, jqXHR)
+        {},
+        error: function (jqXHR, textStatus, errorThrown)
+        {}
+      });
+    });
+
+    $('#btn-chat-question').click(function(){
+      var quizID = "<%=@quiz['id']%>";
+
+      var questionID = "<%=@question['id']%>";
+
+      var userEmail = "<%=session[:quiz_user]['email']%>";
+      var chatTextDiv = document.getElementById('chat-input-question');
+      var chatText = document.getElementById('chat-input-question').value;
+      var chatPanel = $("#chat-panel-question");
+      var userId = "<%=session[:quiz_user]['id']%>";
+      var userType = "quizuser";
+      if (chatText)
+      {
+        $.ajax({
+          url : '/set_question_comment',
+          dataType: 'script',
+          type: "POST",
+          data :{ quiz_user_id: userId, user_type: userType, id: questionID, chat_text: chatText, quiz_id: quizID },
+          success: function(data, textStatus, jqXHR)
+          {},
+          error: function (jqXHR, textStatus, errorThrown)
+          {}
+        });
+
+        var text = chatText;
+        var chat =  '<li class="right clearfix"><span class="chat-img pull-right"><img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><small class=" text-muted"><span class="glyphicon glyphicon-time"></span>Just Now</small><strong class="pull-right primary-font">' + userEmail  +'</strong></div><p>'+ text +'</p></div></li>'
+
+
+        var chat2 =  '<ul class="chat" id="chatBoxQuestion"><li class="right clearfix"><span class="chat-img pull-right"><img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><small class=" text-muted"><span class="glyphicon glyphicon-time"></span>Just Now</small><strong class="pull-right primary-font">' + userEmail  +'</strong></div><p>'+ text +'</p></div></li></ul>'
+        var chatBox =document.getElementById('chatBoxQuestion');
+        
+        if(chatBox){
+          chatBox.innerHTML += chat;  
+        }
+        else{
+          chatPanel.html("");
+          chatPanel.html(chat2);
+        }
+        $("#chat-input-question").val("");
+      }
+    });
+  });
+</script>

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [ -z "${TAG}" ]
+then
+  TAG='latest'
+fi
+
+docker tag cogli-quiz-creation:latest gcr.io/oval-tuner-169121/cogli-quiz-creation:$TAG
+gcloud docker -- push gcr.io/oval-tuner-169121/cogli-quiz-creation:$TAG

@@ -1,0 +1,2 @@
+$("#chatBox").empty();
+$("#chatBox").html("<%= escape_javascript(render(partial: 'quizzes/chat_box', :locals => {:@chats => @chats})) %>");

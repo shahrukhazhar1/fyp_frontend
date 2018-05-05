@@ -1,0 +1,28 @@
+@media screen and (max-width:1200px) {
+}
+ @media screen and (max-width:1024px) {
+}
+
+/* Responsive nav kicks in */
+@media screen and (max-width:991px) {
+
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-width:767px) and (max-width:768px){
+
+
+}
+
+@media(min-width:767px) {
+
+}
+
+@media only screen and (max-width:766px){
+
+}
+
+
+
+
+

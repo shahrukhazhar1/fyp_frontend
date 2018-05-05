@@ -1,0 +1,67 @@
+<%= form_tag(courses_path, {multipart: true, :class => 'form-horizontal bordered-group course-new-form'}) do %>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Course Name</label>
+    </div>
+    <div class="col-sm-4">
+      <%= text_field_tag "course[name]", '',class: 'form-control'%>
+    </div>
+  </div>
+  <div class="form-group">
+
+    <div class="col-sm-2 control-label">
+      <label>Add First Attachment to Course</label>
+    </div>
+    <div class="col-sm-4">
+
+      <%=  file_field_tag "course[attachment]", class: 'form-control', placeholder: '.pdf',:accept => ".pdf" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+
+    <div class="col-sm-2 control-label">
+      <label>Add Second Attachment to Course</label>
+    </div>
+    <div class="col-sm-4">
+
+      <%=  file_field_tag "course[attachment2]", class: 'form-control', placeholder: '.pdf',:accept => ".pdf" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Activate Support?</label>
+      <%= check_box_tag 'course[support]' %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-xs-6">
+      <%= submit_tag "Create Course", class: 'btn btn-primary'  %>
+      <%= link_to 'Cancel', :back, class: 'btn btn-default' %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+  $(".course-new-form").validate({
+
+    rules: {
+      "course[name]": {
+        required: true
+      }
+    },
+    messages: {
+      "quiz[name]": {
+        required: "Course Name cannot be blank"
+      }
+    },
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+});
+</script>

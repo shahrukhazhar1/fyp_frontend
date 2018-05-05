@@ -1,0 +1,24 @@
+<%= form_tag(study_guide_quiz_path, {:method => "get",:class => 'form-horizontal bordered-group'}) do %>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Text for Study Guide</label>
+    </div>
+    <div class="col-sm-4">
+      <input type="textarea" name="study_text" class="form-control">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Comment Box for Study Guide</label>
+    </div>
+    <div class="col-sm-4">
+      <input type="textarea" name="study_comment" class="form-control">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-xs-6">
+      <input type="submit" value="Save Study Guide" class="btn btn-primary">
+      <%= link_to 'Return to Quiz Overview', quiz_path(@quiz['id']), :class => 'btn btn-default' %>
+    </div>
+  </div>
+<% end %>

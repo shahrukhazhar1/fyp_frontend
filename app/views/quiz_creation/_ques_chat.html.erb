@@ -1,0 +1,102 @@
+<div class="panel mb25">
+  <div class="panel-heading broder">
+    <h1>Questions for <%=@quiz['name']%></h1>
+  </div>
+  <div class="panel-body">
+    <div class="row no-margin">
+      <div class="col-lg-12">
+        <%= render 'questions_list' %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Chat -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-comment"></span> Chat
+        </div>
+        
+        <div class="panel-body panel-body-chat" id="chat-panel-question">
+          <%if @question['comments'].blank? %>
+            <p>No chat History</p>
+          <%else%>
+            <ul class="chat" id="chatBoxQuestion">
+              <% @chats = @question['comments'] %>
+              <%= render(partial: 'questions/chat_box')%>
+              
+            </ul>
+          <%end%>  
+        </div>
+          
+      
+        <div class="panel-footer">
+          <div class="input-group">
+            <input id="chat-input-question" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+            <span class="input-group-btn">
+              <input type="hidden" id="quiz-user-id">
+              <button class="btn btn-primary btn-sm" id="btn-chat-question">Send</button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<script type="text/javascript">
+  $('.collapse').collapse();
+
+  $(document).ready(function(){
+
+    $('#btn-chat-question').click(function(){
+      var quizID = "<%=@quiz['id']%>";
+
+      var questionID = "<%=@question['id']%>";
+
+      var userEmail = "<%=session[:quiz_user]['email']%>";
+      var chatTextDiv = document.getElementById('chat-input-question');
+      var chatText = document.getElementById('chat-input-question').value;
+      var chatPanel = $("#chat-panel-question");
+      var userId = "<%=session[:quiz_user]['id']%>";
+      var userType = "quizuser";
+      if (chatText)
+      {
+        $.ajax({
+          url : '/set_question_comment',
+          dataType: 'script',
+          type: "POST",
+          data :{ quiz_user_id: userId, user_type: userType, id: questionID, chat_text: chatText, quiz_id: quizID },
+          success: function(data, textStatus, jqXHR)
+          {},
+          error: function (jqXHR, textStatus, errorThrown)
+          {}
+        });
+
+        var text = chatText;
+        var chat =  '<li class="right clearfix"><span class="chat-img pull-right"><img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><small class=" text-muted"><span class="glyphicon glyphicon-time"></span>Just Now</small><strong class="pull-right primary-font">' + userEmail  +'</strong></div><p>'+ text +'</p></div></li>'
+
+
+        var chat2 =  '<ul class="chat" id="chatBoxQuestion"><li class="right clearfix"><span class="chat-img pull-right"><img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><small class=" text-muted"><span class="glyphicon glyphicon-time"></span>Just Now</small><strong class="pull-right primary-font">' + userEmail  +'</strong></div><p>'+ text +'</p></div></li></ul>'
+        var chatBox =document.getElementById('chatBoxQuestion');
+        
+        if(chatBox){
+          chatBox.innerHTML += chat;  
+        }
+        else{
+          chatPanel.html("");
+          chatPanel.html(chat2);
+        }
+        $("#chat-input-question").val("");
+      }
+    });
+  });
+</script>

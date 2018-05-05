@@ -1,0 +1,91 @@
+<%= form_tag({action: 'update'},{multipart: true, :method => "patch", :class => 'form-horizontal bordered-group course-new-form'}) do %>
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Course Name</label>
+    </div>
+    <div class="col-sm-4">
+      <%= text_field_tag "course[name]", "#{@course['name']}", class: 'form-control'%>
+    </div>
+  </div>
+
+  <%if @course['attachment_url'].present? %>
+    <div class="form-group">
+      <div class="col-sm-2 control-label">
+        <label>Course First Attachment Link:</label>
+      </div>
+
+      <div class="img-with-text">
+        <label><%= link_to "Course Attachment #1", @course['attachment_url'], target: "_blank"%></label>
+      </div>
+    </div>
+    
+  <%end%>
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Update Course First Attachment</label>
+    </div>
+    <div class="col-sm-4">
+      <%=  file_field_tag "course[attachment]", class: 'form-control', placeholder: '.pdf',:accept => ".pdf" %>
+    </div>
+  </div>
+
+
+  <%if @course['attachment2_url'].present? %>
+    <div class="form-group">
+      <div class="col-sm-2 control-label">
+        <label>Course Second Attachment Link:</label>
+      </div>
+
+      <div class="img-with-text">
+        <label><%= link_to "Course Attachment #2", @course['attachment2_url'], target: "_blank"%></label>
+      </div>
+    </div>
+    
+  <%end%>
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Update Course Second Attachment</label>
+    </div>
+    <div class="col-sm-4">
+      <%=  file_field_tag "course[attachment2]", class: 'form-control', placeholder: '.pdf',:accept => ".pdf" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
+      <label>Activate Support?</label>
+      <%= check_box_tag 'course[support]','',@course['support']  %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-xs-6">
+      <%= submit_tag "Update Course", class: 'btn btn-primary'  %>
+      <%= link_to 'Cancel', course_path(@course['id']), class: 'btn btn-default' %>
+    </div>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+  $(".course-new-form").validate({
+
+    rules: {
+      "course[name]": {
+        required: true
+      }
+    },
+    messages: {
+      "course[name]": {
+        required: "Course Name cannot be blank"
+      }
+    },
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+});
+</script>

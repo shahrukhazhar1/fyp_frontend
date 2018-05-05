@@ -1,0 +1,116 @@
+<div class="user-account-cont">
+
+  <div class="header-home">
+    <div class="container">
+      <a class="logo" href="#">Cogli</a>
+
+      <div class="login-cont pull-right">
+        <%= form_for(:quiz_user, :url => '/login', :html=>{class: "form-inline"}) do |f| %>  
+          <div class="form-group">
+            <%= f.label :email, 'Email Address', :class => 'sr-only' %>
+            <%= f.email_field :email, class: 'form-control', placeholder: 'Email Address', required: true, :autocomplete => 'off' %>
+          </div>
+          <div class="form-group">
+            <!-- <label class="sr-only" for="exampleInputPassword3">Password</label> -->
+            <%= f.label :email, 'Password', :class => 'sr-only' %>
+            <%= f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password', required: true %>
+          </div>
+          <%= f.button 'Sign In' %>
+          <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+            <%= link_to "Forgot Password?", new_password_path(resource_name), :class => 'forgot-link' %>
+          <% end -%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- <div class="row fadeInUp"> -->
+
+      <!-- <div class="col-md-6">
+        <div class="welcome-cogli-text">
+            <p>
+              <!-- <span>Welcome</span>
+              to the Cogli Quiz Maker<br>
+              Here You Can... -->
+            <!-- </p>
+            <ul>
+              <li>Create New Quizzes</li>
+              <li>Submit Your Quizzes for Approval</li>
+              <li>Communicate with Quiz Administrators</li>
+              <li>Modify and submit new versions of your quizzes for approval</li>
+            </ul>
+          </div> -->
+      <!-- </div> -->
+
+       <div class="col-md-5 pull-right">
+        <!-- <div class="sign-up-cont">
+          <h1>Create An Account!</h1>
+         <%= form_for(:quiz_user, :url => '/signup', :html=>{class: "quiz-signup-form"}) do |f| %>
+            <div class="form-group">
+              <%= f.email_field :email, class: 'form-control', placeholder: 'Email Address' %>
+            </div>
+            <div class="form-group">
+              <%= f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password (8 characters minimum)', id: 'quiz-user-pwd' %>
+            </div>
+            <div class="form-group">
+              <%= f.password_field :password_confirmation, autocomplete: "off", class: 'form-control', placeholder: 'Repeat Password' %>
+            </div>
+            <div class="form-group">
+            <%= f.button 'Create Account', :class => 'btn-block' %>
+            </div>
+          <% end %>
+        </div> -->
+      </div>
+    </div>
+  </div>
+ </div>
+
+ <script type="text/javascript">
+$(document).ready(function(){
+  // var apiURL = "<%= Rails.env.production? ? 'https://cogli-new.herokuapp.com/check_quiz_user_email' : 'http://localhost:5000/check_quiz_user_email'%>"
+  var apiURL = "/check_email"
+  console.log("URLLLLLLLLLL");
+  console.log(apiURL);
+  $(".quiz-signup-form").validate({
+
+    rules: {
+      "quiz_user[email]": {
+        required: true,
+        email: true
+        ,
+        remote: {
+          url: apiURL,
+          type: "post"
+        }
+      },
+      "quiz_user[password]": {
+        required: true,
+        minlength: 8
+      },
+      "quiz_user[password_confirmation]": {
+        equalTo: "#quiz-user-pwd"
+      }
+    },
+    messages: {
+      "quiz_user[email]": {
+        required: "Email cannot be blank",
+        email: "Please enter a valid email address",
+        remote: "Email already exists"
+      },
+      "quiz_user[password]": {
+        required: "Please provide a password",
+        minlength: "Your password must be at least 8 characters long"
+      },
+      "quiz_user[password_confirmation]": {
+       equalTo: "Password and Confirm Password does not match"
+      }
+    },
+    submitHandler: function(form) {
+      form.submit();
+    }
+  });
+
+});
+
+</script>

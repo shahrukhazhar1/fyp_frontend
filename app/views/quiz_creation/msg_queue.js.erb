@@ -1,0 +1,9 @@
+<%if @quiz.present? %>
+$("#new-q-chat").empty();
+$("#new-q-chat").html("<%= escape_javascript(render(:partial => 'quiz_creation/quiz_msgs', :locals => {:@quizzes => @quizzes})) %>");
+<%end%>
+
+<%if @questions.present? && @question.present? %>
+	$("#new-ques-chat").empty();
+	$("#new-ques-chat").html("<%= escape_javascript(render(:partial => 'quiz_creation/ques_chat', :locals => {:@quiz => @quiz, :@questions => @questions, :@question => @question})) %>");
+<%end%>

@@ -1,0 +1,13 @@
+<div class="panel mb25">
+  <div class="panel-heading broder">
+    <h1>Edit '<%= @question['text'] %>'</h1>
+  </div>
+  <div class="panel-body">
+    <div class="row no-margin">
+      <div class="col-lg-12">
+        <%= render 'edit_form', :cancel_link => quiz_path(@quiz['id']) %>
+      </div>
+    </div>
+  </div>
+</div>
+
