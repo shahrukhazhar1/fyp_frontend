@@ -12,6 +12,7 @@
             <th>Quiz Name</th>
             <th>Difficulty Level</th>
             <th>Description</th>
+            <th>Course</th>
             <th>View Quiz</th>
           </tr>
           <% @quiz_results.each_with_index do |quiz_selection, i| %>
@@ -25,6 +26,7 @@
 
 
               <!-- <td class=""><span data-container="body" data-trigger="hover" data-toggle="popover" data-placement="top" data-content="<%= quiz_selection['first_question'].present? ? quiz_selection['first_question']['text'] : quiz_selection['default_question'] %>">Question</span></td> -->
+              <td><%=quiz_selection['course_name']%></td>
               <td>
                 <%= link_to 'View Quiz',quiz_path(quiz_selection['id']), :class => 'btn btn-default' %>
               </td>

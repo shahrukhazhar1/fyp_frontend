@@ -55,6 +55,24 @@
 
   <div class="form-group">
     <div class="col-sm-2 control-label">
+      <label>Course Labels</label>
+    </div>
+
+    <div class="col-sm-4">
+      <select id="quiz_grade_id" name="label_all[]" class="form-control course-label" multiple="multiple">
+        <% @labels.each do |label| %>
+        <%if @course_labels.include?(label['name']) %>
+          <option value="<%= label['id'] %>" selected><%= label['name']%></option>
+        <%else%>
+          <option value="<%= label['id'] %>"><%= label['name']%></option>
+        <%end%>
+        <% end %>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
       <label>Activate Support?</label>
       <%= check_box_tag 'course[support]','',@course['support']  %>
     </div>
@@ -70,6 +88,9 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+  $(".course-label").select2({
+    placeholder: "Select Course Label"
+  });
 
   $(".course-new-form").validate({
 

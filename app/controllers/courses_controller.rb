@@ -13,6 +13,9 @@ class CoursesController < ApplicationController
   end
   
   def new
+    data_params={}
+    res_json = make_request("api/v1/courses/fetch_labels",data_params,"GET")
+    @labels = res_json['labels']
   end
 
   def create
@@ -66,39 +69,53 @@ class CoursesController < ApplicationController
     error_msgs = []
     data_params={}
     data_params[:course] = params[:course]
+    if params[:label_all].present?
+      data_params['label_all[]'] = params[:label_all]
+    end
 
     if params[:course][:attachment].blank? && params[:course][:attachment2].blank?
       res_json = make_request("api/v1/courses",data_params,"POST")
     else
-      if Rails.env.production?
-        url = "#{Rails.configuration.parent_portal_url}/" + 'api/v1/courses'
-        uri = URI(url)
+      @response = Utils::Utils.make_post_request_with_upload!(
+        "api/v1/courses",
+        {
+          "course" => params[:course],
+          "auth_token" => session[:auth_token],
+          'label_all[]' => params[:label_all]
+        }
+      )
+      # if Rails.env.production?
+      #   url = "#{Rails.configuration.parent_portal_url}/" + 'api/v1/courses'
+      #   uri = URI(url)
 
-        res = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
-          request = Net::HTTP::Post.new(uri.request_uri)
+      #   res = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+      #     request = Net::HTTP::Post.new(uri.request_uri)
 
-          request.body = Rack::Multipart::Generator.new(
-            "course"                  => params[:course],
-            "auth_token"             => session[:auth_token]
-          ).dump
-          request.content_type = "multipart/form-data, boundary=#{Rack::Multipart::MULTIPART_BOUNDARY}"
-          @response = http.request(request)
-        end
+      #     request.body = Rack::Multipart::Generator.new(
+      #       "course"                  => params[:course],
+      #       "auth_token"             => session[:auth_token],
+      #       'label_all[]' => params[:label_all]
+      #     ).dump
+      #     request.content_type = "multipart/form-data, boundary=#{Rack::Multipart::MULTIPART_BOUNDARY}"
+      #     @response = http.request(request)
+      #   end
 
 
-      else
-        url = "http://localhost:5000/" + 'api/v1/courses'
-        uri = URI(url)
-        http    = Net::HTTP.new(uri.host, uri.port)
-        request = Net::HTTP::Post.new(uri.request_uri)
-        request.body = Rack::Multipart::Generator.new(
-          "course"                  => params[:course],
-          "auth_token"             => session[:auth_token]
-        ).dump
-        request.content_type = "multipart/form-data, boundary=#{Rack::Multipart::MULTIPART_BOUNDARY}"
-        @response = http.request(request)
+      # else
+      #   url = "http://localhost:5000/" + 'api/v1/courses'
+      #   uri = URI(url)
+      #   http    = Net::HTTP.new(uri.host, uri.port)
+      #   request = Net::HTTP::Post.new(uri.request_uri)
+      #   request.body = Rack::Multipart::Generator.new(
+      #     "course"                  => params[:course],
+      #     "auth_token"             => session[:auth_token]
+      #     # ,'label_all[]' => params[:label_all]
 
-      end
+      #   ).dump
+      #   request.content_type = "multipart/form-data, boundary=#{Rack::Multipart::MULTIPART_BOUNDARY}"
+      #   @response = http.request(request)
+
+      # end
       if @response.code.to_i == 200
         res_json = JSON.parse(@response.body)
       else
@@ -134,6 +151,10 @@ class CoursesController < ApplicationController
 
     if res_json['success']
       @course = res_json['course']
+      @course_labels = res_json["course_labels"]
+      @labels = res_json["labels"]
+
+      
     else
       flash[:alert] = res_json["message"]
       redirect_to root_path
@@ -192,6 +213,9 @@ class CoursesController < ApplicationController
 
     data_params = {}
     data_params[:course] = params[:course]
+    if params[:label_all].present?
+      data_params['label_all[]'] = params[:label_all]
+    end
     if params[:course][:attachment].blank? && params[:course][:attachment2].blank?
       res_json = make_request("api/v1/courses/#{params[:id]}",data_params,"PUT")
     else

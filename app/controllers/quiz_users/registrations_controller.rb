@@ -6,7 +6,7 @@ class QuizUsers::RegistrationsController < Devise::RegistrationsController
     data_params[:quiz_user]=params[:quiz_user]
     res_json = make_request('api/v1/register',data_params,request.env["REQUEST_METHOD"])
     if @response.code.to_i==200
-      flash[:success] = 'Account created successfully, we have sent you a confirmation email, please log in to your email account and click the confirmation link'
+      flash[:success] = 'Account created successfully'
       redirect_to quiz_user_session_path
     else
       flash.now[:alert] = res_json["error"].join(' , ')

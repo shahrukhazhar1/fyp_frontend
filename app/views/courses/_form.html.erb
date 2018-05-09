@@ -31,6 +31,20 @@
 
   <div class="form-group">
     <div class="col-sm-2 control-label">
+      <label>Select Labels for the course</label>
+    </div>
+    <div class="col-sm-4">
+      <select id="course_label_id" name="label_all[]" class="form-control course-label" multiple="multiple">
+        <% labels = @labels %>
+        <% labels.each do |label| %>
+          <option value="<%= label['id'] %>"><%= label['name']%></option>
+        <% end %>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-2 control-label">
       <label>Activate Support?</label>
       <%= check_box_tag 'course[support]' %>
     </div>
@@ -47,6 +61,10 @@
 <script type="text/javascript">
 $(document).ready(function() {
 
+  $(".course-label").select2({
+    placeholder: "Select Label"
+  });
+  
   $(".course-new-form").validate({
 
     rules: {

@@ -16,9 +16,6 @@
             <%= f.password_field :password, autocomplete: "off", class: 'form-control', placeholder: 'Password', required: true %>
           </div>
           <%= f.button 'Sign In' %>
-          <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
-            <%= link_to "Forgot Password?", new_password_path(resource_name), :class => 'forgot-link' %>
-          <% end -%>
         <% end %>
       </div>
     </div>
@@ -44,7 +41,7 @@
       <!-- </div> -->
 
        <div class="col-md-5 pull-right">
-        <!-- <div class="sign-up-cont">
+        <div class="sign-up-cont">
           <h1>Create An Account!</h1>
          <%= form_for(:quiz_user, :url => '/signup', :html=>{class: "quiz-signup-form"}) do |f| %>
             <div class="form-group">
@@ -60,7 +57,7 @@
             <%= f.button 'Create Account', :class => 'btn-block' %>
             </div>
           <% end %>
-        </div> -->
+        </div>
       </div>
     </div>
   </div>

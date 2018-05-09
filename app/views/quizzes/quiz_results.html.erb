@@ -23,6 +23,8 @@
                   <% @quiz_results.each_with_index do |qs,index| %>
                     <% index_plus = index +1 %>
                     <% pass_labels = qs["result_labels"].join(",") %>
+                    <% course_labels = qs["course_labels"].join(",") %>
+
 
                     <div data-item-id = <%= "#{qs['id']}"%> index-row = <%="#{index_plus}"%> class="col-xs-12 qqueue-item-row item row-margin with-hover">
                       
@@ -34,6 +36,11 @@
                           <p>
                             You did well in: <b><%= pass_labels %></b>
                           </p>
+                          <% if course_labels.length>0 %>
+                          <p>
+                            We recommneded you these courses: <b><%= course_labels %></b>
+                          </p>
+                          <%end%>
                         <%else%>
                           <h4 class="device-msg">
                             <b>Please take this quiz again. You did not pass</b>
