@@ -33,9 +33,11 @@
                           <h4 class="device-msg">
                             <b>Quiz: <%= qs["quiz_name"] %></b>
                           </h4>
-                          <p>
-                            You did well in: <b><%= pass_labels %></b>
-                          </p>
+                          <% if pass_labels.length>0 %>
+                            <p>
+                              You did well in: <b><%= pass_labels %></b>
+                            </p>
+                          <%end%>
                           <% if course_labels.length>0 %>
                           <p>
                             We recommneded you these courses: <b><%= course_labels %></b>

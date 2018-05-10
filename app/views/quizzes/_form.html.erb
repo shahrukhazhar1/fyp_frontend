@@ -4,7 +4,7 @@
       <label>Select Course</label>
     </div>
     <div class="col-sm-4">
-      <select id="quiz_course_id" name="course_id" class="form-control select-course">
+      <select id="quiz_course_id" name="quiz[course_id]" class="form-control select-course">
         <% courses = @courses %>
         <% courses.each do |course| %>
           <option value="<%= course['id'] %>"><%= course['name']%></option>
